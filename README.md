@@ -6,12 +6,12 @@
 
 | 구분 | 내용 |
 | :--- | :--- |
-| **과제명** | [cite_start]기말고사 대체 과제 (Term Project)  |
-| **주제** | [cite_start]홈페이지 제작 및 2페이지 이상을 React로 작성 (미니 블로그 구현)  |
+| **과제명** | 기말고사 대체 과제 (Term Project)  |
+| **주제** | 홈페이지 제작 및 2페이지 이상을 React로 작성 (미니 블로그 구현)  |
 | **개발 언어/프레임워크** | React (함수형 컴포넌트), JavaScript, HTML, CSS |
-| **주요 기술** | [cite_start]React Router DOM, useState Hook, 배열 렌더링, 폼 핸들링  |
-| **데이터** | [cite_start]더미 데이터 (JSON 형태) 사용  |
-| [cite_start]**GitHub Repository** | https://github.com/Goldstargreat/Mini_Blog  |
+| **주요 기술** | React Router DOM, useState Hook, 배열 렌더링, 폼 핸들링  |
+| **데이터** | 더미 데이터 (JSON 형태) 사용  |
+| **GitHub Repository** | https://github.com/Goldstargreat/Mini_Blog  |
 
 ## ⚙️ 주요 기술 및 구현 목표
 
