@@ -1,4 +1,4 @@
-import React from 'react';  // 빌드 끝
+import React from 'react';
 import styled from 'styled-components';
 import CommentListItem from './CommentListItem';
 
