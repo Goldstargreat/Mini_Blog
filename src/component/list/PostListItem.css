@@ -1,0 +1,19 @@
+/* styled-components의 const Wrapper = styled.div`...` 를 변환한 CSS */
+.Wrapper {
+    width: calc(100% - 32px);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    border: 1px solid gray;
+    border-radius: 8px;
+    cursor: pointer;
+    background: white;
+}
+
+/* styled-components의 const TitleText = styled.p`...` 를 변환한 CSS */
+.TitleText {
+    font-size: 20px;
+    font-weight: 500;
+}
