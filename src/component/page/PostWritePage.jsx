@@ -3,24 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import TextInput from '../ui/TextInput';
 import Button from '../ui/Button';
+import './PostWritePage.css';
 
-const Wrapper = styled.div`
-    padding: 16px;
-    width: calc(100% - 32px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`;
-
-const Container = styled.div`
-    width: 100%;
-    max-width: 720px;
-
-    :not(:last-child) {
-        margin-bottom: 16px;
-    }
-`;
 
 function PostWritePage(props) {
     const navigate = useNavigate();
@@ -29,8 +13,8 @@ function PostWritePage(props) {
     const [content, setContent] = useState('');
 
     return (
-        <Wrapper>
-            <Container>
+        <div className="write-wrapper">
+            <div className="write-container">
                 <TextInput
                     height={20}
                     value={title}
@@ -53,8 +37,8 @@ function PostWritePage(props) {
                         navigate('/');
                     }}
                 />
-            </Container>
-        </Wrapper>
+            </div>
+        </div>
     );
 }
 
