@@ -78,6 +78,9 @@ React (localhost:3000)  ──/api 요청──▶  Express (localhost:4000)  �
     npm run db:init   # miniblog DB와 테이블 생성 + 초기 데이터 입력
     npm start         # http://localhost:4000
     ```
+
+    > 💡 루트 폴더에서 `npm start` 를 실행하면 API 서버(4000)와 React(3000)가 **한 번에** 실행됩니다.
+    > 각각 따로 실행하려면 `npm run server` / `npm run client` 를 사용하세요.
 4.  **React 앱 설치 · 실행** (새 터미널, 프로젝트 루트에서)
     ```bash
     npm install

@@ -16,7 +16,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently -k -n server,client -c blue,green \"npm:server\" \"npm:client\"",
+    "client": "react-scripts start",
+    "server": "npm --prefix server start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -45,5 +47,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6"
   }
 }
