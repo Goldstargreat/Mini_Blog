@@ -59,6 +59,16 @@ function PostWritePage(props) {
         }
     };
 
+    // 작성/수정 취소: 새 글이면 메인으로, 수정이면 해당 글 상세 페이지로 이동
+    const handleCancel = () => {
+        // 새 글 작성 중 입력한 내용이 있으면 한 번 확인
+        if (!isEdit && (title.trim() || content.trim())
+            && !window.confirm('작성 중인 내용이 사라집니다. 취소하시겠습니까?')) {
+            return;
+        }
+        navigate(isEdit ? `/post/${postId}` : '/');
+    };
+
     if (loading) {
         return (
             <div className="write-wrapper">
@@ -96,12 +106,10 @@ function PostWritePage(props) {
                     title={submitTitle}
                     onClick={handleSubmit}
                 />
-                {isEdit && (
-                    <Button
-                        title='취소'
-                        onClick={() => navigate(`/post/${postId}`)}
-                    />
-                )}
+                <Button
+                    title='뒤로가기'
+                    onClick={handleCancel}
+                />
             </div>
         </div>
     );
