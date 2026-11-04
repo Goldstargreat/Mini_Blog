@@ -35,6 +35,10 @@ React (localhost:3000)  ──/api 요청──▶  Express (localhost:4000)  �
 | GET | `/api/posts/:id` | 게시글 상세 + 댓글 |
 | POST | `/api/posts` | 게시글 작성 (`title`, `content`) |
 | POST | `/api/posts/:id/comments` | 댓글 작성 (`content`) |
+| PUT | `/api/posts/:id` | 게시글 수정 (`title`, `content`) |
+| DELETE | `/api/posts/:id` | 게시글 삭제 (댓글도 함께 삭제) |
+| PUT | `/api/posts/:id/comments/:commentId` | 댓글 수정 (`content`) |
+| DELETE | `/api/posts/:id/comments/:commentId` | 댓글 삭제 |
 
 테이블 구조는 `server/schema.sql` 에 있으며, 기존 더미 데이터(`server/seed-data.json`)는 최초 실행 시 초기 데이터로 입력됩니다.
 

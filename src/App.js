@@ -24,6 +24,7 @@ function App(props) {
           <Route index element={<MainPage />} />
           <Route path="post-write" element={<PostWritePage />} />
           <Route path="post/:postId" element={<PostViewPage />} />
+          <Route path="post/:postId/edit" element={<PostWritePage />} />
         </Routes>
       </BrowserRouter>
   );

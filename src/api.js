@@ -37,3 +37,25 @@ export function createComment(postId, content) {
         body: JSON.stringify({ content }),
     });
 }
+
+export function updatePost(postId, title, content) {
+    return request(`/api/posts/${postId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ title, content }),
+    });
+}
+
+export function deletePost(postId) {
+    return request(`/api/posts/${postId}`, { method: 'DELETE' });
+}
+
+export function updateComment(postId, commentId, content) {
+    return request(`/api/posts/${postId}/comments/${commentId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ content }),
+    });
+}
+
+export function deleteComment(postId, commentId) {
+    return request(`/api/posts/${postId}/comments/${commentId}`, { method: 'DELETE' });
+}

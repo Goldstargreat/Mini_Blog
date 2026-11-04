@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CommentList from '../list/CommentList';
 import TextInput from '../ui/TextInput';
 import Button from '../ui/Button';
-import { getPost, createComment } from '../../api';
+import { getPost, createComment, deletePost, updateComment, deleteComment } from '../../api';
 import './PostViewPage.css';
 
 function PostViewPage(props) {
@@ -43,6 +43,51 @@ function PostViewPage(props) {
         }
     };
 
+    const handleDeletePost = async () => {
+        if (!window.confirm('이 글을 삭제할까요? 댓글도 함께 삭제됩니다.')) {
+            return;
+        }
+        try {
+            await deletePost(postId);
+            navigate('/');
+        } catch (err) {
+            alert(err.message);
+        }
+    };
+
+    // 성공하면 true 를 돌려줘서 댓글 항목이 수정 모드를 닫게 함
+    const handleUpdateComment = async (commentId, content) => {
+        try {
+            const updated = await updateComment(postId, commentId, content);
+            setPost((prev) => ({
+                ...prev,
+                comments: prev.comments.map((c) =>
+                    c.id === commentId ? { ...c, content: updated.content } : c
+                ),
+            }));
+            return true;
+        } catch (err) {
+            alert(err.message);
+            return false;
+        }
+    };
+
+    const handleDeleteComment = async (commentId) => {
+        if (!window.confirm('이 댓글을 삭제할까요?')) {
+            return;
+        }
+        try {
+            await deleteComment(postId, commentId);
+            // 삭제한 댓글을 목록에서 바로 제거
+            setPost((prev) => ({
+                ...prev,
+                comments: prev.comments.filter((c) => c.id !== commentId),
+            }));
+        } catch (err) {
+            alert(err.message);
+        }
+    };
+
     const backButton = (
         <Button
             title='뒤로 가기'
@@ -66,14 +111,24 @@ function PostViewPage(props) {
     return (
         <div className="view-wrapper">
             <div className="view-container">
-                {backButton}
+                <div className="button-row">
+                    {backButton}
+                    <div className="button-group">
+                        <Button title='글 수정하기' onClick={() => navigate(`/post/${postId}/edit`)} />
+                        <Button title='글 삭제하기' onClick={handleDeletePost} />
+                    </div>
+                </div>
                 <div className="post-container">
                     <p className="title-text">{post.title}</p>
                     <p className="content-text">{post.content}</p>
                 </div>
 
                 <p className="comment-label">댓글</p>
-                <CommentList comments={post.comments} />
+                <CommentList
+                    comments={post.comments}
+                    onUpdate={handleUpdateComment}
+                    onDelete={handleDeleteComment}
+                />
 
                 <TextInput
                     height={40}

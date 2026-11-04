@@ -43,3 +43,14 @@
     font-size: 16px;
     font-weight: 500;
 }
+
+/* 뒤로 가기 / 삭제 버튼 줄 */
+.button-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+}

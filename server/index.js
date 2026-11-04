@@ -92,6 +92,98 @@ app.post('/api/posts/:id/comments', async (req, res, next) => {
     }
 });
 
+// 게시글 수정
+app.put('/api/posts/:id', async (req, res, next) => {
+    try {
+        const postId = Number(req.params.id);
+        const title = (req.body.title || '').trim();
+        const content = (req.body.content || '').trim();
+        if (!Number.isInteger(postId)) {
+            return res.status(400).json({ message: '잘못된 게시글 번호입니다.' });
+        }
+        if (!title || !content) {
+            return res.status(400).json({ message: '제목과 내용을 입력해 주세요.' });
+        }
+
+        const [result] = await pool.query(
+            'UPDATE post SET title = ?, content = ? WHERE id = ?',
+            [title, content, postId]
+        );
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: '존재하지 않는 게시글입니다.' });
+        }
+        res.json({ id: postId, title, content });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// 게시글 삭제 (댓글은 FK의 ON DELETE CASCADE 로 함께 삭제됨)
+app.delete('/api/posts/:id', async (req, res, next) => {
+    try {
+        const postId = Number(req.params.id);
+        if (!Number.isInteger(postId)) {
+            return res.status(400).json({ message: '잘못된 게시글 번호입니다.' });
+        }
+
+        const [result] = await pool.query('DELETE FROM post WHERE id = ?', [postId]);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: '존재하지 않는 게시글입니다.' });
+        }
+        res.status(204).end();
+    } catch (err) {
+        next(err);
+    }
+});
+
+// 댓글 수정
+app.put('/api/posts/:id/comments/:commentId', async (req, res, next) => {
+    try {
+        const postId = Number(req.params.id);
+        const commentId = Number(req.params.commentId);
+        const content = (req.body.content || '').trim();
+        if (!Number.isInteger(postId) || !Number.isInteger(commentId)) {
+            return res.status(400).json({ message: '잘못된 요청입니다.' });
+        }
+        if (!content) {
+            return res.status(400).json({ message: '댓글 내용을 입력해 주세요.' });
+        }
+
+        const [result] = await pool.query(
+            'UPDATE comment SET content = ? WHERE id = ? AND post_id = ?',
+            [content, commentId, postId]
+        );
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: '존재하지 않는 댓글입니다.' });
+        }
+        res.json({ id: commentId, content });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// 댓글 삭제
+app.delete('/api/posts/:id/comments/:commentId', async (req, res, next) => {
+    try {
+        const postId = Number(req.params.id);
+        const commentId = Number(req.params.commentId);
+        if (!Number.isInteger(postId) || !Number.isInteger(commentId)) {
+            return res.status(400).json({ message: '잘못된 요청입니다.' });
+        }
+
+        const [result] = await pool.query(
+            'DELETE FROM comment WHERE id = ? AND post_id = ?',
+            [commentId, postId]
+        );
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: '존재하지 않는 댓글입니다.' });
+        }
+        res.status(204).end();
+    } catch (err) {
+        next(err);
+    }
+});
+
 // 공통 에러 처리
 app.use((err, req, res, next) => {
     console.error(err);

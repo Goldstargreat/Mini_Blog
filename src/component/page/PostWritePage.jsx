@@ -1,17 +1,41 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import TextInput from '../ui/TextInput';
 import Button from '../ui/Button';
-import { createPost } from '../../api';
+import { createPost, getPost, updatePost } from '../../api';
 import './PostWritePage.css';
 
-
+// /post-write 이면 새 글 작성, /post/:postId/edit 이면 기존 글 수정
 function PostWritePage(props) {
     const navigate = useNavigate();
+    const { postId } = useParams();
+    const isEdit = Boolean(postId);
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [loading, setLoading] = useState(isEdit);
     const [submitting, setSubmitting] = useState(false);
+
+    // 수정 모드: 기존 제목과 내용을 불러와 입력칸에 채움
+    useEffect(() => {
+        if (!isEdit) {
+            setTitle('');
+            setContent('');
+            setLoading(false);
+            return;
+        }
+        setLoading(true);
+        getPost(postId)
+            .then((post) => {
+                setTitle(post.title);
+                setContent(post.content);
+            })
+            .catch((err) => {
+                alert(err.message);
+                navigate('/');
+            })
+            .finally(() => setLoading(false));
+    }, [isEdit, postId, navigate]);
 
     const handleSubmit = async () => {
         if (!title.trim() || !content.trim()) {
@@ -20,14 +44,34 @@ function PostWritePage(props) {
         }
         try {
             setSubmitting(true);
-            const newPost = await createPost(title, content);
-            // 작성한 글의 상세 페이지로 이동
-            navigate(`/post/${newPost.id}`);
+            if (isEdit) {
+                await updatePost(postId, title, content);
+                // 수정한 글의 상세 페이지로 이동
+                navigate(`/post/${postId}`);
+            } else {
+                const newPost = await createPost(title, content);
+                // 작성한 글의 상세 페이지로 이동
+                navigate(`/post/${newPost.id}`);
+            }
         } catch (err) {
             alert(err.message);
             setSubmitting(false);
         }
     };
+
+    if (loading) {
+        return (
+            <div className="write-wrapper">
+                <div className="write-container">
+                    <p>불러오는 중...</p>
+                </div>
+            </div>
+        );
+    }
+
+    const submitTitle = isEdit
+        ? (submitting ? '수정 중...' : '글 수정하기')
+        : (submitting ? '작성 중...' : '글 작성하기');
 
     return (
         <div className="write-wrapper">
@@ -49,9 +93,15 @@ function PostWritePage(props) {
                 />
 
                 <Button
-                    title={submitting ? '작성 중...' : '글 작성하기'}
+                    title={submitTitle}
                     onClick={handleSubmit}
                 />
+                {isEdit && (
+                    <Button
+                        title='취소'
+                        onClick={() => navigate(`/post/${postId}`)}
+                    />
+                )}
             </div>
         </div>
     );
