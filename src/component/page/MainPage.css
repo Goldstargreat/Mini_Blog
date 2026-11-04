@@ -1,5 +1,5 @@
 /* 전체 래퍼 */
-.wrapper {
+.main-wrapper {
     padding: 16px;
     width: calc(100% - 32px);
     display: flex;
@@ -9,11 +9,15 @@
 }
 
 /* 내부 컨테이너 */
-.container {
+.main-container {
     width: 100%;
     max-width: 720px;
 }
 
-.container:not(:last-child) {
+.main-container > *:not(:last-child) {
     margin-bottom: 16px;
+}
+
+.error-text {
+    color: crimson;
 }

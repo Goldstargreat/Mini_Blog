@@ -1,5 +1,5 @@
 /* styled-components의 const Wrapper = styled.div`...` 를 변환한 CSS */
-.Wrapper {
+.post-list-item {
     width: calc(100% - 32px);
     padding: 16px;
     display: flex;
@@ -13,7 +13,7 @@
 }
 
 /* styled-components의 const TitleText = styled.p`...` 를 변환한 CSS */
-.TitleText {
+.post-list-item-title {
     font-size: 20px;
     font-weight: 500;
 }

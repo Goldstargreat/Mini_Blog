@@ -1,12 +1,12 @@
 import React from "react";
 import './PostListItem.css';
 
-function PostListItem(props){
-    const{post, onClick} = props;
+function PostListItem(props) {
+    const { post, onClick } = props;
 
-    return(
-        <div className="Wrapper" onClick={onClick}>
-            <p className="TitleText">{post.title}</p>
+    return (
+        <div className="post-list-item" onClick={onClick}>
+            <p className="post-list-item-title">{post.title}</p>
         </div>
     );
 

@@ -8,8 +8,8 @@ function PostList(props) {
     const { posts, onClickItem } = props;
 
     return (
-        <div className= "wrapper">
-            {posts.map((post, index) => {
+        <div className="post-list-wrapper">
+            {posts.map((post) => {
                 return (
                     <PostListItem
                         key={post.id}

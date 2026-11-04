@@ -1,5 +1,5 @@
 /* Wrapper */
-.wrapper {
+.view-wrapper {
     padding: 16px;
     width: calc(100% - 32px);
     display: flex;
@@ -9,12 +9,12 @@
 }
 
 /* Container */
-.container {
+.view-container {
     width: 100%;
     max-width: 720px;
 }
 
-.container > :not(:last-child) {
+.view-container > *:not(:last-child) {
     margin-bottom: 16px;
 }
 

@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PostList from '../list/PostList';
 import Button from '../ui/Button';
-import data from '../../data.json';
+import { getPosts } from '../../api';
 import './MainPage.css';
 
 function MainPage(props) {
     const navigate = useNavigate();
 
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        getPosts()
+            .then((data) => setPosts(data))
+            .catch((err) => setError(err.message))
+            .finally(() => setLoading(false));
+    }, []);
+
     return (
-        <div className="wrapper">
-            <div className="container">
+        <div className="main-wrapper">
+            <div className="main-container">
                 <Button
                     title='글 작성하기'
                     onClick={() => {
@@ -18,8 +29,12 @@ function MainPage(props) {
                     }}
                 />
 
+                {loading && <p>불러오는 중...</p>}
+                {error && <p className="error-text">{error}</p>}
+                {!loading && !error && posts.length === 0 && <p>아직 작성된 글이 없습니다.</p>}
+
                 <PostList
-                    posts={data}
+                    posts={posts}
                     onClickItem={(item) => {
                         navigate(`/post/${item.id}`);
                     }}

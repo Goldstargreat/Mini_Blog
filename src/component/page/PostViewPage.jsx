@@ -1,31 +1,72 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import CommentList from '../list/CommentList';
 import TextInput from '../ui/TextInput';
 import Button from '../ui/Button';
-import data from '../../data.json';
-import './PostViewPage.css'
+import { getPost, createComment } from '../../api';
+import './PostViewPage.css';
 
 function PostViewPage(props) {
     const navigate = useNavigate();
     const { postId } = useParams();
 
-    const post = data.find((item) => {
-        return item.id == postId;
-    });
-
+    const [post, setPost] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
     const [comment, setComment] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+
+    useEffect(() => {
+        setLoading(true);
+        setError('');
+        getPost(postId)
+            .then((data) => setPost(data))
+            .catch((err) => setError(err.message))
+            .finally(() => setLoading(false));
+    }, [postId]);
+
+    const handleSubmitComment = async () => {
+        if (!comment.trim()) {
+            alert('댓글 내용을 입력해 주세요.');
+            return;
+        }
+        try {
+            setSubmitting(true);
+            const newComment = await createComment(postId, comment);
+            // 작성한 댓글을 목록에 바로 반영
+            setPost((prev) => ({ ...prev, comments: [...prev.comments, newComment] }));
+            setComment('');
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const backButton = (
+        <Button
+            title='뒤로 가기'
+            onClick={() => {
+                navigate('/');
+            }}
+        />
+    );
+
+    if (loading || error || !post) {
+        return (
+            <div className="view-wrapper">
+                <div className="view-container">
+                    {backButton}
+                    <p className="title-text">{loading ? '불러오는 중...' : error}</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div className="wrapper">
-            <div className="container">
-                <Button
-                    title='뒤로 가기'
-                    onClick={() => {
-                        navigate('/');
-                    }}
-                />
+        <div className="view-wrapper">
+            <div className="view-container">
+                {backButton}
                 <div className="post-container">
                     <p className="title-text">{post.title}</p>
                     <p className="content-text">{post.content}</p>
@@ -42,10 +83,8 @@ function PostViewPage(props) {
                     }}
                 />
                 <Button
-                    title='댓글 작성하기'
-                    onClick={() => {
-                        navigate('/');
-                    }}
+                    title={submitting ? '작성 중...' : '댓글 작성하기'}
+                    onClick={handleSubmitComment}
                 />
             </div>
         </div>
